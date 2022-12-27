@@ -1,9 +1,4 @@
 ﻿using Contracts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Repository
 {
@@ -20,9 +15,9 @@ namespace Repository
             _employeeRepository = new Lazy<IEmployeeRepository>(() => new EmployeeRepository(repositoryContext));
         }
 
-        public ICompanyRepository CompanyRepository => _companyRepository.Value;
+        public ICompanyRepository Company => _companyRepository.Value;
 
-        public IEmployeeRepository EmployeeRepository => _employeeRepository.Value; 
+        public IEmployeeRepository Employee => _employeeRepository.Value; 
 
         public void Save()
         {

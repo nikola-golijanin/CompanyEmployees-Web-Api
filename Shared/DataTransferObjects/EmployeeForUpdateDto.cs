@@ -1,4 +1,4 @@
-namespace Shared.DataTransferObjects
-{
-    public record EmployeeForUpdateDto(string Name, int Age, string Position);
-}
+using Shared.DataTransferObjects;
+
+public record EmployeeForUpdateDto : EmployeeForManipulationDto;
+

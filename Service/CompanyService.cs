@@ -43,10 +43,10 @@ namespace Service
                 _repository.Company.CreateCompany(company);
             }
             _repository.Save();
-            
+
             var companyCollectionToReturn =
             _mapper.Map<IEnumerable<CompanyDto>>(companyEntities);
-            
+
             var ids = string.Join(",", companyCollectionToReturn.Select(c => c.Id));
             return (companies: companyCollectionToReturn, ids: ids);
         }
@@ -97,6 +97,18 @@ namespace Service
 
             var companyDto = _mapper.Map<CompanyDto>(company);
             return companyDto;
+        }
+
+        public void UpdateCompany(Guid companyId, CompanyForUpdateDto companyForUpdate, bool trackChanges)
+        {
+            var companyEntity = _repository.Company.GetCompany(companyId,trackChanges);
+            if(companyEntity is null)
+            {
+                throw new CompanyNotFoundException(companyId);
+            }
+
+            _mapper.Map(companyForUpdate,companyEntity);
+            _repository.Save();
         }
     }
 }

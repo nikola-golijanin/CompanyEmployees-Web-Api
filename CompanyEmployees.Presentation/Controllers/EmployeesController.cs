@@ -1,7 +1,9 @@
-﻿using CompanyEmployees.Presentation.ActionFilters;
+﻿using System.Text.Json;
+using CompanyEmployees.Presentation.ActionFilters;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Service.Contracts;
+using Shared.RequestFeatures;
 
 namespace CompanyEmployees.Presentation.Controllers
 {
@@ -17,12 +19,18 @@ namespace CompanyEmployees.Presentation.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetEmployeesForCompany(Guid companyId)
+        public async Task<IActionResult> GetEmployeesForCompany(Guid companyId,[FromQuery] EmployeeParameters employeeParameters)
         {
-            var employees = await _service.EmployeeService.GetEmployeesAsync(companyId, trackChanges: false);
-            return Ok(employees);
+            var pagedResult =
+                await _service.EmployeeService.GetEmployeesAsync(companyId,employeeParameters, trackChanges: false);
+            
+            Response.Headers.Add("X-Pagination",JsonSerializer.Serialize(pagedResult.metaData));
+            
+            return Ok(pagedResult.employees);
         }
 
+        
+        
         [HttpGet("{id:guid}", Name = "GetEmployeeForCompany")]
         public async Task<IActionResult> GetEmployeeForCompany(Guid companyId, Guid id)
         {
@@ -30,6 +38,8 @@ namespace CompanyEmployees.Presentation.Controllers
             return Ok(employee);
         }
 
+        
+        
         [HttpPost]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> CreateEmployeeForCompany
@@ -40,6 +50,8 @@ namespace CompanyEmployees.Presentation.Controllers
                 employeeToReturn);
         }
 
+        
+        
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> DeleteEmployeeForCompany(Guid companyId, Guid id)
         {
@@ -48,6 +60,8 @@ namespace CompanyEmployees.Presentation.Controllers
             return NoContent();
         }
 
+        
+        
         [HttpPut("{id:guid}")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> UpdateEmployeeForCompany(Guid companyId, Guid id,
@@ -59,6 +73,8 @@ namespace CompanyEmployees.Presentation.Controllers
             return NoContent();
         }
 
+        
+        
         [HttpPatch("{id:guid}")]
         public async Task<IActionResult> PartiallyUpdateEmployeeForCompany(Guid companyId, Guid id,
             [FromBody] JsonPatchDocument<EmployeeForUpdateDto> patchDoc)

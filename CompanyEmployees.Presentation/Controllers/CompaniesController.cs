@@ -25,6 +25,8 @@ namespace CompanyEmployees.Presentation.Controllers
             return Ok(companies);
         }
 
+        
+        
         [HttpGet("{id:guid}" , Name = "CompanyById")]
         public async Task<IActionResult> GetCompany(Guid id)
         {
@@ -32,6 +34,8 @@ namespace CompanyEmployees.Presentation.Controllers
             return Ok(company);
         }
 
+        
+        
         [HttpPost]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> CreateCompany([FromBody] CompanyForCreationDto company)
@@ -40,6 +44,8 @@ namespace CompanyEmployees.Presentation.Controllers
             return CreatedAtRoute("CompanyById", new { id = createdCompany.Id },createdCompany);
         }
 
+        
+        
         [HttpGet("collection/({ids})", Name = "CompanyCollection")]
         public async Task<IActionResult> GetCompanyCollection([ModelBinder(BinderType = typeof(ArrayModelBinder))]IEnumerable<Guid> ids)
         {
@@ -47,6 +53,8 @@ namespace CompanyEmployees.Presentation.Controllers
             return Ok(companies);
         }
 
+        
+        
         [HttpPost("collection")]
         public async Task<IActionResult> CreateCompanyCollection([FromBody] IEnumerable<CompanyForCreationDto> companyCollection)
         {
@@ -54,6 +62,8 @@ namespace CompanyEmployees.Presentation.Controllers
             return CreatedAtRoute("CompanyCollection", new { ids = result.ids }, result.companies);
         }
 
+        
+        
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> DeleteCompany(Guid id)
         {
@@ -61,6 +71,8 @@ namespace CompanyEmployees.Presentation.Controllers
             return NoContent();
         }
 
+        
+        
         [HttpPut("{id:guid}")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> UpdateCompany(Guid id, [FromBody] CompanyForUpdateDto company)

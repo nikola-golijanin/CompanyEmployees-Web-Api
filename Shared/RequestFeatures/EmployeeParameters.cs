@@ -7,4 +7,9 @@ public class EmployeeParameters : RequestParameters
 
     public bool ValidAgeRange => MaxAge > MinAge;
     public string? SearchTerm { get; set; }
+    
+    public EmployeeParameters()
+    {
+        OrderBy = "name";
+    }
 }

@@ -2,10 +2,7 @@
 
 ASP.NET Core Web Api
 
-## Features
-
-Implementation from Ultimate ASP.NET Core Web API Second Edition Book
-
+## Implementation from Ultimate ASP.NET Core Web API Second Edition Book
 - Logging service
 - Onion Architecture ( with Repository Pattern )
 - Handling GET Requests

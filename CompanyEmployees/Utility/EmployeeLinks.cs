@@ -26,7 +26,9 @@ public class EmployeeLinks : IEmployeeLinks
 		var shapedEmployees = ShapeData(employeesDto, fields);
 
 		if (ShouldGenerateLinks(httpContext))
+		{
 			return ReturnLinkdedEmployees(employeesDto, fields, companyId, httpContext, shapedEmployees);
+		}
 
 		return ReturnShapedEmployees(shapedEmployees);
 	}
@@ -43,8 +45,13 @@ public class EmployeeLinks : IEmployeeLinks
 		return mediaType.SubTypeWithoutSuffix.EndsWith("hateoas", StringComparison.InvariantCultureIgnoreCase);
 	}
 
-	private LinkResponse ReturnShapedEmployees(List<Entity> shapedEmployees) =>
-		new LinkResponse { ShapedEntities = shapedEmployees };
+	private LinkResponse ReturnShapedEmployees(List<Entity> shapedEmployees)
+	{
+		return new LinkResponse
+		{
+			ShapedEntities = shapedEmployees
+		};
+	}
 
 	private LinkResponse ReturnLinkdedEmployees(IEnumerable<EmployeeDto> employeesDto,
 		string fields, Guid companyId, HttpContext httpContext, List<Entity> shapedEmployees)

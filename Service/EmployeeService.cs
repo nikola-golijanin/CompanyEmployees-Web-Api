@@ -29,7 +29,9 @@ internal sealed class EmployeeService : IEmployeeService
 		(Guid companyId, LinkParameters linkParameters, bool trackChanges)
 	{
 		if (!linkParameters.EmployeeParameters.ValidAgeRange)
+		{
 			throw new MaxAgeRangeBadRequestException();
+		}
 
 		await CheckIfCompanyExists(companyId, trackChanges);
 

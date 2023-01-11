@@ -70,7 +70,6 @@ public class Entity : DynamicObject, IXmlSerializable, IDictionary<string, objec
 	private void WriteLinksToXml(string key, object value, XmlWriter writer)
 	{
 		writer.WriteStartElement(key);
-
 		if (value.GetType() == typeof(List<Link>))
 		{
 			foreach (var val in value as List<Link>)
@@ -86,9 +85,9 @@ public class Entity : DynamicObject, IXmlSerializable, IDictionary<string, objec
 		{
 			writer.WriteString(value.ToString());
 		}
-
 		writer.WriteEndElement();
 	}
+
 
 	public void Add(string key, object value)
 	{

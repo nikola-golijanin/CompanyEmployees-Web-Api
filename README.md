@@ -20,6 +20,9 @@ ASP.NET Core Web Api
 - Searching
 - Sorting
 - Data Shaping
+- Supporting HATEOAS
+- Working with OPTIONS and HEAD Requests
+- Versioning APIs
 
 
 ## Commit History

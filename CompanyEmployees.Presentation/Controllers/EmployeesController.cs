@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Service.Contracts;
 using Shared.RequestFeatures;
 
-namespace CompanyEmployees.Presentation.Controllers
-{
+namespace CompanyEmployees.Presentation.Controllers;
+
     [Route("api/companies/{companyId}/employees")]
     [ApiController]
     public class EmployeesController : ControllerBase
@@ -108,4 +108,4 @@ namespace CompanyEmployees.Presentation.Controllers
             return NoContent();
         }
     }
-}
+

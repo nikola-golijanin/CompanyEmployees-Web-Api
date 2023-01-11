@@ -39,7 +39,7 @@ builder.Services.AddControllers(config =>
     .AddXmlDataContractSerializerFormatters()
     .AddApplicationPart(typeof(CompanyEmployees.Presentation.AssemblyReference).Assembly);
 builder.Services.AddCustomMediaTypes();
-
+builder.Services.ConfigureVersioning();
 
 var app = builder.Build();
 

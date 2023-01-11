@@ -34,12 +34,25 @@ builder.Services.AddControllers(config =>
         config.RespectBrowserAcceptHeader = true;
         config.ReturnHttpNotAcceptable = true;
         config.InputFormatters.Insert(0, GetJsonPatchInputFormatter());
+        // we dont need this because we use Marvin.Cache.Headers(which is private cache): 
+        // config.CacheProfiles.Add("CompaniesCache120SecDuration",    
+        //     new CacheProfile
+        //     {
+        //         Duration = 120 
+        //     }
+        // );
     })
     .AddCustomCSVFormatter()
     .AddXmlDataContractSerializerFormatters()
     .AddApplicationPart(typeof(CompanyEmployees.Presentation.AssemblyReference).Assembly);
 builder.Services.AddCustomMediaTypes();
 builder.Services.ConfigureVersioning();
+builder.Services.ConfigureResponseCaching();
+builder.Services.ConfigureHttpCacheHeaders();
+
+
+
+
 
 var app = builder.Build();
 
@@ -66,6 +79,10 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
 
 
 app.UseCors("CorsPolicy");
+
+app.UseResponseCaching();
+
+app.UseHttpCacheHeaders();
 
 app.UseAuthorization();
 

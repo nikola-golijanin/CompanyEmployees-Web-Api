@@ -1,6 +1,7 @@
 ﻿using CompanyEmployees.Presentation.ActionFilters;
 using CompanyEmployees.Presentation.ModelBinders;
 using Marvin.Cache.Headers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service.Contracts;
 using Shared.DataTransferObjects;
@@ -10,6 +11,7 @@ namespace CompanyEmployees.Presentation.Controllers;
     [ApiVersion("1.0")]
     [Route("api/companies")]
     [ApiController]
+    [Authorize]
     // we dont need this because Marvin.Cache.Headers(which is private cache) provides this too:
     // [ResponseCache(CacheProfileName = "CompaniesCache120SecDuration")]
     public class CompaniesController : ControllerBase
@@ -22,6 +24,7 @@ namespace CompanyEmployees.Presentation.Controllers;
         }
 
         [HttpGet(Name = "GetCompanies")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> GetCompanies()
         {
             var companies = await _service.CompanyService.GetAllCompaniesAsync(trackChanges:false);
@@ -89,6 +92,7 @@ namespace CompanyEmployees.Presentation.Controllers;
         
         
         [HttpOptions]
+        [Authorize(Roles = "Administrator")]
         public IActionResult GetCompaniesOptions()
         {
             Response.Headers.Add("Allow","GET, OPTIONS, POST, PUT, DELETE");

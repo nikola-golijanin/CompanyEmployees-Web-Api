@@ -3,27 +3,27 @@ using Service.Contracts;
 
 namespace CompanyEmployees.Presentation.Controllers;
 
-    //With {v:apiVersion} our uri will be api/2.0/companies
-    [ApiVersion("2.0", Deprecated = true)]
-    [Route("api/{v:apiVersion}/companies")]
-    [ApiController]
-    public class CompaniesV2Controller : ControllerBase
+//With {v:apiVersion} our uri will be api/2.0/companies
+[ApiVersion("2.0", Deprecated = true)]
+[Route("api/{v:apiVersion}/companies")]
+[ApiController]
+public class CompaniesV2Controller : ControllerBase
+{
+    private readonly IServiceManager _service;
+
+    public CompaniesV2Controller(IServiceManager service)
     {
-        private readonly IServiceManager _service;
-
-        public CompaniesV2Controller(IServiceManager service)
-        {
-            _service = service;
-        }
-        
-        [HttpGet]
-        public async Task<IActionResult> GetCompanies()
-        {
-            var companies = await _service.CompanyService
-                .GetAllCompaniesAsync(trackChanges: false);
-
-            var companiesV2 = companies.Select(x => $"{x.Name} V2");
-
-            return Ok(companiesV2);
-        }
+        _service = service;
     }
+    
+    [HttpGet]
+    public async Task<IActionResult> GetCompanies()
+    {
+        var companies = await _service.CompanyService
+            .GetAllCompaniesAsync(trackChanges: false);
+
+        var companiesV2 = companies.Select(x => $"{x.Name} V2");
+
+        return Ok(companiesV2);
+    }
+}

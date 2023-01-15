@@ -23,6 +23,12 @@ ASP.NET Core Web Api
 - Supporting HATEOAS
 - Working with OPTIONS and HEAD Requests
 - Versioning APIs
+- Caching
+- Rate limiting
+- Jwt and Identity
+- Refresh token
+- Binding Configuration and Options Pattern
+- Documenting API with Swagger
 
 
 ## Commit History

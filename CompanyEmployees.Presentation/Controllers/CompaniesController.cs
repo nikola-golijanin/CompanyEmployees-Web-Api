@@ -11,6 +11,7 @@ namespace CompanyEmployees.Presentation.Controllers;
 [Route("api/companies")]
 [ApiController]
 [Authorize]
+[ApiExplorerSettings(GroupName = "v1")]
 // we dont need this because Marvin.Cache.Headers(which is private cache) provides this too:
 // [ResponseCache(CacheProfileName = "CompaniesCache120SecDuration")]
 public class CompaniesController : ControllerBase
@@ -22,6 +23,10 @@ public class CompaniesController : ControllerBase
         _service = service;
     }
 
+    /// <summary>
+    /// Gets the list of all companies
+    /// </summary>
+    /// <returns>The companies list</returns>
     [HttpGet(Name = "GetCompanies")]
     [Authorize(Roles = "Manager")]
     public async Task<IActionResult> GetCompanies()
@@ -30,20 +35,40 @@ public class CompaniesController : ControllerBase
         return Ok(companies);
     }
 
-    
-    
+
+
+    /// <summary>
+    /// Gets the company for id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns>The companies list</returns>
+    /// <response code="200">Returns the item for id</response>
+    /// <response code="404">If the item id is wrong or null</response>
     [HttpGet("{id:guid}" , Name = "CompanyById")]
     [HttpCacheExpiration(CacheLocation = CacheLocation.Public, MaxAge = 60)]  //overriding controller config
     [HttpCacheValidation(MustRevalidate = false)]  //overriding controller config
+    [ProducesResponseType(200)]
+    [ProducesResponseType(404)]
     public async Task<IActionResult> GetCompany(Guid id)
     {
         var company = await _service.CompanyService.GetCompanyAsync(id, trackChanges: false);
         return Ok(company);
     }
 
-    
-    
+
+
+    /// <summary>
+    /// Creates a newly created company
+    /// </summary>
+    /// <param name="company"></param>
+    /// <returns>A newly created company</returns>
+    /// <response code="201">Returns the newly created item</response>
+    /// <response code="400">If the item is null</response>
+    /// <response code="422">If the model is invalid</response>
     [HttpPost(Name = "CreateCompany")]
+    [ProducesResponseType(201)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(422)]
     [ServiceFilter(typeof(ValidationFilterAttribute))]
     public async Task<IActionResult> CreateCompany([FromBody] CompanyForCreationDto company)
     {

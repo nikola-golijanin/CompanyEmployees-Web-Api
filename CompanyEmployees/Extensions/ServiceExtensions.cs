@@ -30,6 +30,11 @@ namespace CompanyEmployees.Extensions
                         .WithExposedHeaders("X-Pagination"));
             });
 
+        public static void ConfigureIISIntegration(this IServiceCollection services) =>
+            services.Configure<IISOptions>(options =>
+            {
+            });
+
         public static void ConfigureLoggerService(this IServiceCollection services) =>
             services.AddSingleton<ILoggerManager, LoggerManager>();
 

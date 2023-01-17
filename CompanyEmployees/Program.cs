@@ -17,6 +17,7 @@ var builder = WebApplication.CreateBuilder(args);
 LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(),
 "/nlog.config"));
 builder.Services.ConfigureCors();
+builder.Services.ConfigureIISIntegration();
 builder.Services.ConfigureLoggerService();
 builder.Services.ConfigureRepositoryManager();
 builder.Services.ConfigureServiceManager();
@@ -64,22 +65,20 @@ builder.Services.ConfigureSwagger();
 
 var app = builder.Build();
 
-NewtonsoftJsonPatchInputFormatter GetJsonPatchInputFormatter() =>
-    new ServiceCollection().AddLogging().AddMvc().AddNewtonsoftJson()
-        .Services.BuildServiceProvider()
-        .GetRequiredService<IOptions<MvcOptions>>().Value.InputFormatters
-        .OfType<NewtonsoftJsonPatchInputFormatter>().First();
-
-var logger = app.Services.GetRequiredService<ILoggerManager>();
 
 // Configure the HTTP request pipeline.
+var logger = app.Services.GetRequiredService<ILoggerManager>();
 app.ConfigureExceptionHandler(logger);
 
 if (app.Environment.IsProduction())
+{ 
     app.UseHsts();
+}
 
-//app.UseHttpsRedirection();
+app.UseHttpsRedirection();
+
 app.UseStaticFiles();
+
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
     ForwardedHeaders = ForwardedHeaders.All
@@ -97,13 +96,20 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
-app.MapControllers();
-
 app.UseSwagger();
+
 app.UseSwaggerUI(s =>
 {
     s.SwaggerEndpoint("/swagger/v1/swagger.json", "Code Maze API v1");
     s.SwaggerEndpoint("/swagger/v2/swagger.json", "Code Maze API v2");
 });
 
+app.MapControllers();
+
 app.Run();
+
+NewtonsoftJsonPatchInputFormatter GetJsonPatchInputFormatter() =>
+    new ServiceCollection().AddLogging().AddMvc().AddNewtonsoftJson()
+        .Services.BuildServiceProvider()
+        .GetRequiredService<IOptions<MvcOptions>>().Value.InputFormatters
+        .OfType<NewtonsoftJsonPatchInputFormatter>().First();

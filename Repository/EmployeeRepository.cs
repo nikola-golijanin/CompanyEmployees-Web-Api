@@ -39,11 +39,8 @@ namespace Repository
                 .Skip((employeeParameters.PageNumber - 1) * employeeParameters.PageSize)
                 .Take(employeeParameters.PageSize)
                 .ToListAsync();
-            
-            var count = await FindByCondition(e => e.CompanyId.Equals(companyId), trackChanges)
-                .CountAsync();
-            
-            return new PagedList<Employee>(employees, count, 
+
+            return PagedList<Employee>.ToPagedList(employees, 
                 employeeParameters.PageNumber, employeeParameters.PageSize);
         }
     }
